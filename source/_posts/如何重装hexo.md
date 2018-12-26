@@ -5,7 +5,7 @@ tags: 运维
 
 电脑的npm给删了，于是想要重装Hexo，走了不少弯路，后来发现了方法，记下来留着以后迁移用 <!--more-->
 
-npm重装了之后，hexo没有安装，需要安装，如果以前有过，但是现在报错，也建议重装。原链接丢失，直接贴命令
+npm重装了之后，hexo没有安装，需要安装，如果以前有过，但是现在报错，也建议重装。[原链接](https://github.com/yarnpkg/yarn/issues/1915#issuecomment-295803820)
 
 ```
 sudo npm uninstall hexo-cli -g
