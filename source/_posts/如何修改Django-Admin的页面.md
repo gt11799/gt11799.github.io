@@ -5,7 +5,7 @@ tags: Python
 
 今天有人求助我如何修改Django Admin后台的页面，比如在右上角加个按钮<!--more-->
 
-![](http://7xlo8n.com1.z0.glb.clouddn.com/WX20170802-210835.png)
+![](http://ali.0x01.site/WX20170802-210835.png)
 
 原始需求是，他想做个导出按钮，可以导出当前页面的数据。
 
@@ -48,4 +48,4 @@ function export_file() {
 
 修改之后效果如下：
 
-![](http://7xlo8n.com1.z0.glb.clouddn.com/WX20170802-211133.png)
+![](http://ali.0x01.site/WX20170802-211133.png)

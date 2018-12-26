@@ -12,7 +12,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://0x01.pw
+url: http://blog.0x01.site
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -64,9 +64,9 @@ pagination_dir: page
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
 
-plugins:
-- hexo-generator-feed
-- hexo-generator-sitemap
+# plugins:
+# - hexo-generator-feed
+# - hexo-generator-sitemap
 
 theme: yilia
 
