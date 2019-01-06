@@ -42,7 +42,7 @@ docker network inspect mongo-network
 
 可以看到几个容器的IP
 
-![容器的IP地址](http://ali.0x01.site/WX20170113-002639.png)
+![容器的IP地址](http://s.blog.0x01.site/WX20170113-002639.png)
 
 然后就可以使用IP地址配置了
 
@@ -53,12 +53,12 @@ rs.initiate(config)
 
 再去看mongod的log，发现集群同步成功
 
-![配置成功](http://ali.0x01.site/WX20170113-013308.png)
+![配置成功](http://s.blog.0x01.site/WX20170113-013308.png)
 
 把mongo1停掉，mongo2会成为primary
 
-![mongo2的log](http://ali.0x01.site/WechatIMG1551.jpeg)
-![mongoshell](http://ali.0x01.site/WechatIMG1562.jpeg)
+![mongo2的log](http://s.blog.0x01.site/WechatIMG1551.jpeg)
+![mongoshell](http://s.blog.0x01.site/WechatIMG1562.jpeg)
 
 然后按照MongoDB的文档增加用户
 
@@ -109,7 +109,7 @@ mongod --replSet test-rep --auth --keyFile=/data/key_file
 
 在mongo2，mongo3上按照上述命令，依次启动。发现漂亮的同步成功的标志
 
-![Auth启动成功](http://ali.0x01.site/WX20170113-005044.png)
+![Auth启动成功](http://s.blog.0x01.site/WX20170113-005044.png)
 
 收工
 
