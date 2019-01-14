@@ -24,7 +24,7 @@ sudo apt-get install python-pip
 然后装最新版的shadowsocks的包，当时[这个帖子](https://github.com/shadowsocks/shadowsocks/issues/1046#issuecomment-356886760)讨论的时候，shadowsocks依然不支持上述协议
 
 ```
-pip install --upgrade git+https://github.com/shadowsocks/shadowsocks.git@master
+sudo pip install --upgrade git+https://github.com/shadowsocks/shadowsocks.git@master
 ```
 
 然后需要安装系统依赖， 参考的是[这个教程](https://github.com/shadowsocks/shadowsocks/issues/1046#issuecomment-355224571), 不过我不太喜欢pip加-U命令
@@ -59,7 +59,7 @@ ssserver -c /etc/shadowsocks.json
 然后选择自己喜欢的方式来让进程以daemon运行就好，最简单的是
 
 ```
-ssserver -d -c /etc/shadowsocks.json start
+sudo ssserver -c /etc/shadowsocks.json -d start
 ```
 
 不过我没用这个，我用的是supervisor来托管的进程，可以做到进程退出自动自动，服务器启动也能自动启动。
@@ -67,14 +67,14 @@ ssserver -d -c /etc/shadowsocks.json start
 首先安装supervisor
 
 ```
-pip install supervisor
+sudo pip install supervisor
 ```
 
 然后是配置supervisor
 
 ```
 echo_supervisord_conf > supervisord.conf
-sudo mv supervisor.conf /etc/
+sudo mv supervisord.conf /etc/
 ```
 
 编辑supervisor文件，在最后加上以下配置(如果有别的业务要用到，最好还是分文件)
