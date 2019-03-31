@@ -8,25 +8,25 @@ tags: 运维
 
 查了一下，使用下面的命令可以无密码登入
 
-```
+```bash
 sudo mysql --defaults-file=/etc/mysql/debian.cnf
 ```
 
 文件的位置需要自己去找。我尝试下面的命令去重置root，发现并没有用
 
-```
+```sql
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_password'
 ```
 
 提示我语法错误，懒得去整了。使用下面的命令去重置密码，发现依然无法登陆
 
-```
+```sql
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('new_password');
 ```
 
 干脆新增了一个账户
 
-```
+```sql
 CREATE USER 'pig'@'%' IDENTIFIED BY '123456';
 GRANT ALL ON *.* TO 'pig'@'%';
 FLUSH PRIVILEGES;

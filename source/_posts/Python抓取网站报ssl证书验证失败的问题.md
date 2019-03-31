@@ -13,7 +13,7 @@ tags: Python
 
 虽然走了不少弯路，但是解决起来也非常容易
 
-```
+```python
 requests.get('https://www.somesite.cn', verify=False)
 ```
 
