@@ -1,7 +1,9 @@
-title: 无法安装mysql-python的解决办法
+title: Python环境安装合集
 date: 2019-07-21 23:09:58
 tags: python
 ---
+
+## 无法安装mysql-python的解决办法
 
 公司的电脑按键坏了（有人要买2017款的macbook pro的记得要避坑），把自己的电脑安装公司需要的环境。
 
@@ -36,3 +38,51 @@ LDFLAGS=-L/usr/local/opt/openssl/lib pip install mysql-python
 不管装什么mysql相关的库，都可以试一下上面的这个命令
 
 不过，最好的是直接切换到pymysql上去。
+
+## 无法安装m2crypto
+
+报错如下
+
+```
+SWIG/_m2crypto_wrap.c:2868:10: note: initialize the variable 'res' to silence this warning
+  int res;
+         ^
+          = 0
+SWIG/_m2crypto_wrap.c:3561:10: fatal error: 'openssl/err.h' file not found
+#include <openssl/err.h>
+         ^~~~~~~~~~~~~~~
+1 warning and 1 error generated.
+error: command 'cc' failed with exit status 1
+```
+
+[解决方案](https://stackoverflow.com/questions/33005354/trouble-installing-m2crypto-with-pip-on-os-x-macos)如下
+
+```
+brew install openssl
+brew install swig
+```
+
+然后是
+
+```
+env LDFLAGS="-L$(brew --prefix openssl)/lib" \
+CFLAGS="-I$(brew --prefix openssl)/include" \
+SWIG_FEATURES="-cpperraswarn -includeall -I$(brew --prefix openssl)/include" \
+pip install m2crypto
+```
+
+但是又报了如下错误
+
+```
+AttributeError: 'module' object has no attribute 'X509_up_ref'
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLError("bad handshake: Error([('SSL routines', 'ssl3_get_server_certificate', 'certificate verify failed')],)",),)': /simple/m2crypto/
+```
+
+应该是openssl的版本太低导致的
+
+```
+pip uninstall pyOpenSSL
+pip install pyOpenSSL
+```
+
+然后再执行上面的命令解决了。
