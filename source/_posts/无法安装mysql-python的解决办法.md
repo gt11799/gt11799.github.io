@@ -7,7 +7,7 @@ tags: python
 
 公司的电脑按键坏了（有人要买2017款的macbook pro的记得要避坑），把自己的电脑安装公司需要的环境。
 
-本来pip install -r requirements一行命令就能解决的事情，遇到了mysql-python。这个库是有名的难装，之前帮同事在windows下解决这个问题的时候也卡了好久。
+本来pip install -r requirements一行命令就能解决的事情，遇到了mysql-python。这个库是有名的难装，之前帮同事在windows下解决这个问题的时候也卡了好久。<!--more-->
 
 执行如下命令
 
