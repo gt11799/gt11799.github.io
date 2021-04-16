@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MongoDB的Replica Set以及Auth的配置 | 亦步亦趋记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="MongoDB事件出现后，公司要给MongoDB加Auth，于是我就调研了一番。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB的Replica Set以及Auth的配置">
+<meta property="og:url" content="http://blog.0x01.site/2017/01/13/MongoDB%E7%9A%84Replica-Set%E4%BB%A5%E5%8F%8AAuth%E7%9A%84%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="亦步亦趋记">
+<meta property="og:description" content="MongoDB事件出现后，公司要给MongoDB加Auth，于是我就调研了一番。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://s.blog.0x01.site/WX20170113-002639.png">
+<meta property="og:image" content="http://s.blog.0x01.site/WX20170113-013308.png">
+<meta property="og:image" content="http://s.blog.0x01.site/WechatIMG1551.jpeg">
+<meta property="og:image" content="http://s.blog.0x01.site/WechatIMG1562.jpeg">
+<meta property="og:image" content="http://s.blog.0x01.site/WX20170113-005044.png">
+<meta property="article:published_time" content="2017-01-12T16:08:50.000Z">
+<meta property="article:modified_time" content="2021-04-16T14:48:39.043Z">
+<meta property="article:author" content="Bruce">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://s.blog.0x01.site/WX20170113-002639.png">
+  
+    <link rel="alternative" href="/atom.xml" title="亦步亦趋记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16.67px;">Python</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 10px;">教程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 20px;">运维</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 16.67px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://qnmlgb.tech/">瓦斯阅读</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://bang.duomoyu.com/">多摸鱼</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.bitbo-liuyang.com/">Whistle</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">undefined</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-MongoDB的Replica-Set以及Auth的配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/13/MongoDB%E7%9A%84Replica-Set%E4%BB%A5%E5%8F%8AAuth%E7%9A%84%E9%85%8D%E7%BD%AE/" class="article-date">
+  	<time datetime="2017-01-12T16:08:50.000Z" itemprop="datePublished">2017-01-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MongoDB的Replica Set以及Auth的配置
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MongoDB事件出现后，公司要给MongoDB加Auth，于是我就调研了一番。<br><span id="more"></span></p>
+<p>现在MongoDB在生产中一般使用Replica Set的方式部署，如果一台宕机，另外一台Secondary会变成Master继续服务，提高可用性。</p>
+<p>使用docker搭个集群测试，首先建个network bridge</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network <span class="keyword">new</span> <span class="type">mongo</span>-network</span><br></pre></td></tr></table></figure>
+<p>然后就是运行MongoDB的容器，集群名为test-rep</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">docker</span> <span class="comment">run</span> --<span class="comment">rm</span> <span class="literal">-</span><span class="comment">it</span> --<span class="comment">name</span> <span class="comment">mongo1</span> --<span class="comment">net=mongo</span><span class="literal">-</span><span class="comment">network</span> <span class="comment">mongo</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span></span><br><span class="line"><span class="comment">docker</span> <span class="comment">run</span> --<span class="comment">rm</span> <span class="literal">-</span><span class="comment">it</span> --<span class="comment">name</span> <span class="comment">mongo2</span> --<span class="comment">net=mongo</span><span class="literal">-</span><span class="comment">network</span> <span class="comment">mongo</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span></span><br><span class="line"><span class="comment">docker</span> <span class="comment">run</span> --<span class="comment">rm</span> <span class="literal">-</span><span class="comment">it</span> --<span class="comment">name</span> <span class="comment">mongo3</span> --<span class="comment">net=mongo</span><span class="literal">-</span><span class="comment">network</span> <span class="comment">mongo</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span></span><br></pre></td></tr></table></figure>
+<p>然后再运行一个连接到上述三个MongoDB的容器</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run <span class="params">--rm</span> -it <span class="params">--name</span> mongo-client <span class="params">--net=mongo-network</span> mongo <span class="string">/bin/bash</span></span><br></pre></td></tr></table></figure>
+<p>然后在容器中执行</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo <span class="comment">--host mongo1</span></span><br></pre></td></tr></table></figure>
+<p>发现连接上了，说明MongoDB的配置没有问题，然后是配置Replica Set。Replica Set要求配置的members中不能有localhost，而我配置为mongo2，mongo3这种一直都报类似的错误，我索性找出了几个容器的IP，配置上去</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">docker network inspect mongo-network</span></span><br></pre></td></tr></table></figure>
+<p>可以看到几个容器的IP</p>
+<p><img src="http://s.blog.0x01.site/WX20170113-002639.png" alt="容器的IP地址"></p>
+<p>然后就可以使用IP地址配置了</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;<span class="variable">_id</span>:<span class="string">&quot;test-rep&quot;</span>, version:<span class="number">1</span>, <span class="built_in">members</span>:[&#123;<span class="variable">_id</span>:<span class="number">0</span>, host:<span class="string">&quot;172.19.0.5:27017&quot;</span>, <span class="built_in">priority</span>:<span class="number">5</span>&#125;, &#123;<span class="variable">_id</span>:<span class="number">1</span>, host:<span class="string">&quot;172.19.0.3:27017&quot;</span>, <span class="built_in">priority</span>:<span class="number">2</span>&#125;, &#123;<span class="variable">_id</span>:<span class="number">2</span>, host:<span class="string">&quot;172.19.0.4:27017&quot;</span>, <span class="built_in">priority</span>:<span class="number">3</span>&#125;]&#125;</span><br><span class="line">rs.initiate(config)</span><br></pre></td></tr></table></figure>
+<p>再去看mongod的log，发现集群同步成功</p>
+<p><img src="http://s.blog.0x01.site/WX20170113-013308.png" alt="配置成功"></p>
+<p>把mongo1停掉，mongo2会成为primary</p>
+<p><img src="http://s.blog.0x01.site/WechatIMG1551.jpeg" alt="mongo2的log"><br><img src="http://s.blog.0x01.site/WechatIMG1562.jpeg" alt="mongoshell"></p>
+<p>然后按照MongoDB的文档增加用户</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(</span><br><span class="line">&#123;</span><br><span class="line"><span class="symbol">user:</span> <span class="string">&quot;admin&quot;</span>,</span><br><span class="line"><span class="symbol">pwd:</span> <span class="string">&quot;admin&quot;</span>,</span><br><span class="line"><span class="symbol">roles:</span> [ &#123; role: <span class="string">&quot;userAdminAnyDatabase&quot;</span>, db: <span class="string">&quot;admin&quot;</span> &#125; ]</span><br><span class="line">&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>重启mongod的进程，增加–auth参数，表示启用权限校验</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">docker</span> <span class="comment">run</span> --<span class="comment">rm</span> <span class="literal">-</span><span class="comment">it</span> --<span class="comment">name</span> <span class="comment">mongo1</span> --<span class="comment">net=mongo</span><span class="literal">-</span><span class="comment">network</span> <span class="comment">mongo</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span> --<span class="comment">auth</span></span><br><span class="line"><span class="comment">docker</span> <span class="comment">run</span> --<span class="comment">rm</span> <span class="literal">-</span><span class="comment">it</span> --<span class="comment">name</span> <span class="comment">mongo2</span> --<span class="comment">net=mongo</span><span class="literal">-</span><span class="comment">network</span> <span class="comment">mongo</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span> --<span class="comment">auth</span></span><br><span class="line"><span class="comment">docker</span> <span class="comment">run</span> --<span class="comment">rm</span> <span class="literal">-</span><span class="comment">it</span> --<span class="comment">name</span> <span class="comment">mongo3</span> --<span class="comment">net=mongo</span><span class="literal">-</span><span class="comment">network</span> <span class="comment">mongo</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span> --<span class="comment">auth</span></span><br></pre></td></tr></table></figure>
+<p>发现一直报<code>Error in heartbeat request to 172.19.0.5:27017; Unauthorized: not authorized on admin to execute command</code>的错误，查了很久，发现Replica Set要使用keyFile的校验方式，让集群的member之间同步，也就是说，通过keyFile获得__system用户在local上的权限。local存放着Replica Set的配置和同步信息。<br>MongoDB官方推荐的keyFile的生产方式</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl rand -base64 <span class="number">756</span> &gt; &lt;<span class="type">path</span>-<span class="keyword">to</span>-keyfile&gt;</span><br><span class="line">chmod <span class="number">400</span> &lt;<span class="type">path</span>-<span class="keyword">to</span>-keyfile&gt;</span><br></pre></td></tr></table></figure>
+<p>先结束掉mongod的进程，因为要放入keyFile，于是我启动docker的时候，默认不启动mongod</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run <span class="params">--rm</span> -it <span class="params">--name</span> mongo1 <span class="params">--net=mongo-network</span> mongo <span class="string">/bin/bash</span></span><br></pre></td></tr></table></figure>
+<p>容器里没有装openssl，我偷懒使用了以下命令</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">echo</span> &#x27;I<span class="number">8</span>au<span class="number">1</span>RERvEQkIiIB<span class="number">7</span>vhTMhfceA<span class="number">8</span>oH/L<span class="number">0</span>mT<span class="number">6</span>xxeVgaJg/mYnnZe<span class="number">89</span>dGWjMrQSXI<span class="number">7</span>A&#x27; &gt; /data/key_file</span><br><span class="line"><span class="attribute">chmod</span> <span class="number">400</span> /data/key_file</span><br></pre></td></tr></table></figure>
+<p>然后启动mongod进程</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">mongod</span> --<span class="comment">replSet</span> <span class="comment">test</span><span class="literal">-</span><span class="comment">rep</span> --<span class="comment">auth</span> --<span class="comment">keyFile=/data/key_file</span></span><br></pre></td></tr></table></figure>
+<p>在mongo2，mongo3上按照上述命令，依次启动。发现漂亮的同步成功的标志</p>
+<p><img src="http://s.blog.0x01.site/WX20170113-005044.png" alt="Auth启动成功"></p>
+<p>收工</p>
+<hr>
+<p>生产上的MongoDB，切换到需要Auth，是否可以在不停机的状况下进行呢？</p>
+<p>某同学猜想，mongod不采用Auth的时候，客户端使用密码，可不可以呢？Python连接MongoDB的代码很简单</p>
+<pre><code>pymongo.MongoClient(&apos;mongodb://user:user1@mongo1:27017,mongo2:27017,mongo3:27017/mydb?authMechanism=SCRAM-SHA-1&apos;)
+</code></pre><p>访问mydb的时候，直接就抛<code>Authentication failed</code>错误了。如果我先添加了user呢？在mongo shell中执行</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">&#123;</span><br><span class="line">user: <span class="string">&quot;user&quot;</span>,</span><br><span class="line"><span class="keyword">pwd</span>: <span class="string">&quot;user1&quot;</span>,</span><br><span class="line">roles: [ &#123; role: <span class="string">&quot;readWrite&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;mydb&quot;</span> &#125;,</span><br><span class="line">     &#123; role: <span class="string">&quot;readWrite&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;mydb2&quot;</span> &#125; ]</span><br><span class="line">&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>刚刚的admin，只是访问admin库的用户名和密码，可以管理用户信息，user用户可以用来读写相应的库。此时，mongod依然没有使用<code>--auth</code>启动，因此是没有权限检查的，再次连接，一切正常。</p>
+<p>因此配置步骤如下</p>
+<ul>
+<li>创建MongoDB用户</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">&#123;</span><br><span class="line">user: <span class="string">&quot;admin&quot;</span>,</span><br><span class="line"><span class="keyword">pwd</span>: <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">roles: [ &#123; role: <span class="string">&quot;userAdminAnyDatabase&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;admin&quot;</span> &#125;,</span><br><span class="line">&#123; role: <span class="string">&quot;clusterAdmin&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;admin&quot;</span> &#125;,</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> mydb</span><br><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">&#123;</span><br><span class="line">user: <span class="string">&quot;user&quot;</span>,</span><br><span class="line"><span class="keyword">pwd</span>: <span class="string">&quot;user1&quot;</span>,</span><br><span class="line">roles: [ &#123; role: <span class="string">&quot;dbOwner&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;mydb&quot;</span> &#125;,</span><br><span class="line">     &#123; role: <span class="string">&quot;dbOwner&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;mydb2&quot;</span> &#125; ]</span><br><span class="line">&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改应用，更改MongoDB的URI</li>
+</ul>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pymongo.<span class="constructor">MongoClient(&#x27;<span class="params">mongodb</span>:<span class="operator">/</span><span class="operator">/</span><span class="params">user</span>:<span class="params">user1</span>@<span class="params">mongo1</span>:27017,<span class="params">mongo2</span>:27017,<span class="params">mongo3</span>:27017<span class="operator">/</span><span class="params">mydb</span>?<span class="params">authMechanism</span>=SCRAM-SHA-1&#x27;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>mongod增加keyFile</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl rand -base64 <span class="number">756</span> &gt; <span class="regexp">/data/</span>key_file</span><br><span class="line">chmod <span class="number">400</span> <span class="regexp">/data/</span>key_file</span><br></pre></td></tr></table></figure>
+<ul>
+<li>把key_file上传到其他mongod服务器上，修改mongod配置，一般是/etc/mongodb.conf</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">security:</span></span><br><span class="line"><span class="symbol">authorization:</span> enabled</span><br><span class="line"><span class="symbol">keyFile:</span> <span class="meta-keyword">/data/</span>key_file</span><br></pre></td></tr></table></figure>
+<ul>
+<li>然后同时重启三台mongod</li>
+</ul>
+<p>这样只有重启的那一刹那不可用</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/08/%E6%88%91%E5%AE%B6%E7%9A%84%E7%8C%AB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          我家的猫
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/16/Python%E4%BD%BF%E7%94%A8datetime%E6%8A%A5AttributeErrors%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Python使用datetime报AttributeErrors的解决办法</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="MongoDB的Replica-Set以及Auth的配置" data-title="MongoDB的Replica Set以及Auth的配置" data-url="http://blog.0x01.site/2017/01/13/MongoDB%E7%9A%84Replica-Set%E4%BB%A5%E5%8F%8AAuth%E7%9A%84%E9%85%8D%E7%BD%AE/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2021 Bruce
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-137867677-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

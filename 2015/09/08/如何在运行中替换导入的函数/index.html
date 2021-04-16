@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>如何在运行中替换导入的函数 | 亦步亦趋记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在公司的一个内部分享会上，同事分享了一个很好的可以在函数执行时，替换导入的函数的方法，让我这等土八路实在是羞愧。废话不多说，待我娓娓道来。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在运行中替换导入的函数">
+<meta property="og:url" content="http://blog.0x01.site/2015/09/08/%E5%A6%82%E4%BD%95%E5%9C%A8%E8%BF%90%E8%A1%8C%E4%B8%AD%E6%9B%BF%E6%8D%A2%E5%AF%BC%E5%85%A5%E7%9A%84%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="亦步亦趋记">
+<meta property="og:description" content="在公司的一个内部分享会上，同事分享了一个很好的可以在函数执行时，替换导入的函数的方法，让我这等土八路实在是羞愧。废话不多说，待我娓娓道来。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-09-08T11:39:50.000Z">
+<meta property="article:modified_time" content="2021-04-16T14:48:39.046Z">
+<meta property="article:author" content="Bruce">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="亦步亦趋记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16.67px;">Python</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 10px;">教程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 20px;">运维</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 16.67px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://qnmlgb.tech/">瓦斯阅读</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://bang.duomoyu.com/">多摸鱼</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.bitbo-liuyang.com/">Whistle</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">undefined</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-如何在运行中替换导入的函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/08/%E5%A6%82%E4%BD%95%E5%9C%A8%E8%BF%90%E8%A1%8C%E4%B8%AD%E6%9B%BF%E6%8D%A2%E5%AF%BC%E5%85%A5%E7%9A%84%E5%87%BD%E6%95%B0/" class="article-date">
+  	<time datetime="2015-09-08T11:39:50.000Z" itemprop="datePublished">2015-09-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何在运行中替换导入的函数
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在公司的一个内部分享会上，同事分享了一个很好的可以在函数执行时，替换导入的函数的方法，让我这等土八路实在是羞愧。<br>废话不多说，待我娓娓道来。<span id="more"></span></p>
+<h4 id="事件起因"><a href="#事件起因" class="headerlink" title="事件起因"></a>事件起因</h4><h6 id="我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如："><a href="#我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如：" class="headerlink" title="我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如："></a>我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如：</h6><pre><code>if config[&apos;DEBUG&apos;] = True:
+    dummy_sender(msg)
+</code></pre><p>但是这样很不优雅，而且为了测试脚本，这段代码也要带到生产环境里去，也会影响效率。</p>
+<h3 id="Python的特性"><a href="#Python的特性" class="headerlink" title="Python的特性"></a>Python的特性</h3><h6 id="Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时："><a href="#Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时：" class="headerlink" title="Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时："></a>Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时：</h6><pre><code>from a import sender
+
+def send_sms(msg):
+    sender(msg)
+</code></pre><h5 id="Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为："><a href="#Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为：" class="headerlink" title="Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为："></a>Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为：</h5><pre><code>&apos;send_sms&apos;: &lt;function send_sms at 0x10a1e7050&gt;,
+&apos;__builtins__&apos;: &lt;module &apos;__builtin__&apos; (built-in)&gt;,
+&apos;__file__&apos;: &apos;practise.py&apos;,
+&apos;sender&apos;: &lt;function sender at 0x10a1e7050&gt;,
+</code></pre><h5 id="那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send-sms的globals会带有该脚本的所有globals的属性，我们可以从这里下手"><a href="#那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send-sms的globals会带有该脚本的所有globals的属性，我们可以从这里下手" class="headerlink" title="那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send_sms的globals会带有该脚本的所有globals的属性，我们可以从这里下手"></a>那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send_sms的<strong>globals</strong>会带有该脚本的所有globals的属性，我们可以从这里下手</h5><pre><code>send_sms.__globals__[&apos;sender&apos;] = dummy_sender
+</code></pre><h5 id="如果打印一下sys-modules-我们发现，我们函数名称也在里面。于是也可以替换"><a href="#如果打印一下sys-modules-我们发现，我们函数名称也在里面。于是也可以替换" class="headerlink" title="如果打印一下sys.modules, 我们发现，我们函数名称也在里面。于是也可以替换"></a>如果打印一下sys.modules, 我们发现，我们函数名称也在里面。于是也可以替换</h5><pre><code>sys.modules[&apos;sender&apos;] = dummy_sender
+</code></pre><p>注意，从a脚本导入后，a脚本导入的函数也会在sys.modules里。<br>我对于其中的原理虽然了解一些，但还是难以说清楚，按照土八路的思想，能用就万岁。原理以后再补。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/09/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E4%B8%80%E5%8F%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BF%AB%E9%80%9F%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          如何利用一台远程服务器快速的科学上网
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="如何在运行中替换导入的函数" data-title="如何在运行中替换导入的函数" data-url="http://blog.0x01.site/2015/09/08/%E5%A6%82%E4%BD%95%E5%9C%A8%E8%BF%90%E8%A1%8C%E4%B8%AD%E6%9B%BF%E6%8D%A2%E5%AF%BC%E5%85%A5%E7%9A%84%E5%87%BD%E6%95%B0/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2021 Bruce
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-137867677-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

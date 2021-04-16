@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>运维中的一些常见命令 | 亦步亦趋记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近搞运维搞的比较多，于是乎积攒了很多shell命令，很多都很初级，只是给自己一个备忘。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="运维中的一些常见命令">
+<meta property="og:url" content="http://blog.0x01.site/2016/08/10/%E8%BF%90%E7%BB%B4%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="亦步亦趋记">
+<meta property="og:description" content="最近搞运维搞的比较多，于是乎积攒了很多shell命令，很多都很初级，只是给自己一个备忘。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://s.blog.0x01.site/%E7%AB%AF%E5%8F%A3%E8%BF%9B%E7%A8%8B%E5%8D%A0%E7%94%A8.png">
+<meta property="article:published_time" content="2016-08-10T15:48:02.000Z">
+<meta property="article:modified_time" content="2021-04-16T14:48:39.047Z">
+<meta property="article:author" content="Bruce">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://s.blog.0x01.site/%E7%AB%AF%E5%8F%A3%E8%BF%9B%E7%A8%8B%E5%8D%A0%E7%94%A8.png">
+  
+    <link rel="alternative" href="/atom.xml" title="亦步亦趋记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16.67px;">Python</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 10px;">教程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 20px;">运维</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 16.67px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://qnmlgb.tech/">瓦斯阅读</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://bang.duomoyu.com/">多摸鱼</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.bitbo-liuyang.com/">Whistle</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">undefined</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-运维中的一些常见命令" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/10/%E8%BF%90%E7%BB%B4%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/" class="article-date">
+  	<time datetime="2016-08-10T15:48:02.000Z" itemprop="datePublished">2016-08-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      运维中的一些常见命令
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近搞运维搞的比较多，于是乎积攒了很多shell命令，很多都很初级，只是给自己一个备忘。<span id="more"></span></p>
+<p>查看想要的进程</p>
+<pre><code>ps aux | grep python
+</code></pre><p>杀死查出的进程</p>
+<pre><code>pgrep python | xargs kill -2
+</code></pre><p>查看进程的持续时间</p>
+<pre><code>ps -eo lstart  # 开始时间
+ps -eo etime  # 持续时间
+</code></pre><p>查看端口占用</p>
+<pre><code>netstat -anp | grep 6379
+</code></pre><p>总和</p>
+<pre><code>netstat -anp | grep 6379 | wc -l
+</code></pre><p>假设你的进程如图所示</p>
+<p><img src="http://s.blog.0x01.site/%E7%AB%AF%E5%8F%A3%E8%BF%9B%E7%A8%8B%E5%8D%A0%E7%94%A8.png" alt="进程图"></p>
+<p>那么可以用下面的命令来查看每个进程占用的连接</p>
+<pre><code>netstat -anp | grep 6379 | awk &apos;&#123;print $7&#125;&apos; | awk -F &apos;[/]&apos; &apos;&#123;print $1&#125;&apos; | sort | uniq -c
+</code></pre><p><code>print $7</code>是拿出进程的那一列， <code>-F</code>是分割，<code>sort</code>是排序，<code>uniq -c</code> 相当于group by</p>
+<p><code>awk</code> 真是神器，支持格式化输出，比如用在删除远程分支上时。<code>awk</code>里的<code>/origin/</code>去掉也行，不知道放在这里干嘛的</p>
+<pre><code>git br -r | grep &apos;origin/&apos; | grep -v &apos;master&apos; | awk -F &apos;[/]&apos; &apos;/origin/ &#123;printf &quot;:%s\n&quot;, $2&#125;&apos; | xargs git push origin
+</code></pre><p>删除本地分支</p>
+<pre><code>git br --merged master | grep -v master | xargs git branch -D
+</code></pre><p>删除python的缓存文件(找出文件夹下的某种特征的文件并删除)</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">find</span>  .  -name  <span class="string">&#x27;*.pyc&#x27;</span>  -type  f  -<span class="builtin-name">print</span>  -exec  rm  -rf  &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p>统计各个IP的time_wait</p>
+<pre><code>netstat -n|grep CLOSE_WAIT|awk &apos;&#123;print $5&#125;&apos;|sort |uniq -c |sort -rn |head -n20
+</code></pre><p>查看链接的状况，分类count</p>
+<pre><code>netstat -n|grep 80 | awk &apos;/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;&apos;
+</code></pre><p>数据库快速杀死正在进行的查询</p>
+<pre><code>select concat(&apos;KILL &apos;,id,&apos;;&apos;) from information_schema.processlist where user=&apos;root&apos;;
+select concat(&apos;KILL &apos;,id,&apos;;&apos;) from information_schema.processlist where user=&apos;root&apos; and info like &apos;select %&apos;;  #只有查询语句
+</code></pre><p>然后把结果复制下来，再copy进去即可</p>
+<p>查看数据库中正在进行的查询，以及持续时间</p>
+<pre><code>select * from information_schema.processlist where `command` != &apos;sleep&apos;;
+</code></pre><p>查看数据库中的大表</p>
+<pre><code>select * from information_schema.tables order by DATA_LENGTH DESC limit 10;
+</code></pre><p>或者小优化版</p>
+<pre><code>SELECT concat( table_schema, &apos;.&apos;, table_name ) table_name,
+concat( round( data_length / ( 1024 *1024 ) , 2 ) , &apos;M&apos; ) data_length,
+concat( round( index_length / ( 1024 *1024 ) , 2 ) , &apos;M&apos; ) index_length,
+concat( round( round( data_length + index_length ) / ( 1024 *1024 ) , 2 ) , &apos;M&apos; ) total_size
+FROM information_schema.TABLES
+ORDER BY data_length DESC limit 10;
+</code></pre><p>在线修改Mysql表结构,需要(pt-online-schema-change)[<a target="_blank" rel="noopener" href="https://www.percona.com/doc/percona-toolkit/2.1/pt-online-schema-change.html#dsn-options]">https://www.percona.com/doc/percona-toolkit/2.1/pt-online-schema-change.html#dsn-options]</a></p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pt-online-schema-change <span class="params">--execute</span> -h 127.0.0.1 -u root <span class="params">--ask-pass</span> <span class="params">--alter=</span><span class="string">&quot;add column status tinyint(4) after id&quot;</span> D=test_db,t=test_table</span><br></pre></td></tr></table></figure>
+<p>给用户加组，常见的是加docker组</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -<span class="selector-tag">a</span> -G docker cnzhx</span><br></pre></td></tr></table></figure>
+<p>找出大文件夹</p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h --<span class="built_in">max</span>-<span class="symbol">depth</span>=<span class="number">1</span> /</span><br></pre></td></tr></table></figure>
+<hr>
+<p>以后慢慢补充</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/10/25/%E4%BB%8ESQLAlchemy%E7%9A%84ObjectDeletedError%E5%88%B0SQLAlchemy%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%88%B7%E6%96%B0%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          从SQLAlchemy的ObjectDeletedError到SQLAlchemy的对象刷新机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/10/%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AEsentry/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用docker配置sentry</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="运维中的一些常见命令" data-title="运维中的一些常见命令" data-url="http://blog.0x01.site/2016/08/10/%E8%BF%90%E7%BB%B4%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2021 Bruce
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-137867677-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

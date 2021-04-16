@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用Redis设计锁 | 亦步亦趋记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用Redis来实现分布式锁，发现自己的设计，还是有漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Redis设计锁">
+<meta property="og:url" content="http://blog.0x01.site/2017/11/15/%E4%BD%BF%E7%94%A8Redis%E8%AE%BE%E8%AE%A1%E9%94%81/index.html">
+<meta property="og:site_name" content="亦步亦趋记">
+<meta property="og:description" content="使用Redis来实现分布式锁，发现自己的设计，还是有漏洞">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-15T15:04:22.000Z">
+<meta property="article:modified_time" content="2021-04-16T14:48:39.044Z">
+<meta property="article:author" content="Bruce">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="亦步亦趋记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16.67px;">Python</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 10px;">教程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 20px;">运维</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 16.67px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://qnmlgb.tech/">瓦斯阅读</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://bang.duomoyu.com/">多摸鱼</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.bitbo-liuyang.com/">Whistle</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://s.blog.0x01.site/avatar.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">undefined</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/gt11799" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/1768960544" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/gongting" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:gting405@163.com?subject=我在你的博客看到了你" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-使用Redis设计锁" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/15/%E4%BD%BF%E7%94%A8Redis%E8%AE%BE%E8%AE%A1%E9%94%81/" class="article-date">
+  	<time datetime="2017-11-15T15:04:22.000Z" itemprop="datePublished">2017-11-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Redis设计锁
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用Redis来实现分布式锁，发现自己的设计，还是有漏洞 <span id="more"></span></p>
+<h2 id="完美做法之SETNX"><a href="#完美做法之SETNX" class="headerlink" title="完美做法之SETNX"></a>完美做法之SETNX</h2><p><code>SETNX</code> 是<code>set if not exists</code>的缩写，会返回整数值</p>
+<ul>
+<li>1，当值未被设置</li>
+<li>0，值已经被设置</li>
+</ul>
+<p>于是我们可以这么设置锁</p>
+<ul>
+<li>进程1<code>SETNX KEY</code>返回1，则获得锁</li>
+<li>进程2<code>SETNX KEY</code>返回0，则未获得锁，继续等</li>
+<li>进程1结束，<code>DEL KEY</code></li>
+</ul>
+<p>进程死锁怎么办?</p>
+<p>在获得锁之后，设置一个redis key的过期时间。</p>
+<p>上面的方法有个问题，一个进程一旦超时，删除的锁其实是别的进程的锁，这个时候要怎么办呢？</p>
+<p>再添加个定时器，知晓自己是否超时，决定是否执行<code>DEL</code></p>
+<h2 id="最完美做法之SETNX-EXPIRE"><a href="#最完美做法之SETNX-EXPIRE" class="headerlink" title="最完美做法之SETNX EXPIRE"></a>最完美做法之SETNX EXPIRE</h2><p>来自<a target="_blank" rel="noopener" href="http://blog.csdn.net/lihao21/article/details/49104695">这里</a></p>
+<p>把expire记在value上</p>
+<ul>
+<li>进程1<code>SETNX KEY</code>返回1，则获得锁，把值设为expire</li>
+<li>进程2<code>SETNX KEY</code>返回0，说明锁在，此时<code>GET KEY</code>判断expire是否超时</li>
+<li>进程2判断已经超时，则<code>DEL KEY</code></li>
+</ul>
+<p>这里也有个问题，假设进程3同时也判断超时，会执行跟进程2一样的操作，会同样获得锁</p>
+<ul>
+<li>进程2判断已经超时，则<code>GETSET KEY</code>，<code>GETSET</code>会返回之前的值，如果<code>now &gt; value</code>才是拿到锁</li>
+<li>进程3判断已经超时，则<code>GETSET KEY</code>， 此时拿回的值，比目前的时间大，则不会获得锁。因为这是同时并发的行为，重新设置了一个稍大的expire是可以接受的</li>
+</ul>
+<h2 id="次完美做法之集合"><a href="#次完美做法之集合" class="headerlink" title="次完美做法之集合"></a>次完美做法之集合</h2><p>可以使用redis的集合的唯一性来做，集群也应该没问题</p>
+<ul>
+<li>进程1拿到锁，<code>SADD KEY 1</code>，往集合中添加元素1</li>
+<li>进程2<code>SADD KEY 1</code>，返回0，则未获得锁</li>
+<li>进程1做完，<code>SREM KEY 1</code></li>
+<li>此时进程2<code>SADD KEY 1</code>，返回1，则获得锁</li>
+</ul>
+<p>至于进程死锁的问题，依然只能通过给key设置expire的方式来做，依然需要在进程结束时，判断是否超时</p>
+<h2 id="一般做法INCR"><a href="#一般做法INCR" class="headerlink" title="一般做法INCR"></a>一般做法INCR</h2><ul>
+<li>进程1拿到锁，<code>INCR KEY</code>得到1</li>
+<li>进程2<code>INCR KEY</code>得到2，则未获得锁</li>
+<li>进程1释放锁，<code>DEL KEY</code></li>
+</ul>
+<p>问题很多，锁对应的值会不断的增大，依然要在进程中判断是否超时</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/24/%E6%96%B0%E7%89%88Nginx%E7%9A%84Https%E7%9A%84%E9%85%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          新版Nginx的HTTPS的配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/31/docker%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E6%93%8D%E4%BD%9C/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">docker的一系列操作</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="使用Redis设计锁" data-title="使用Redis设计锁" data-url="http://blog.0x01.site/2017/11/15/%E4%BD%BF%E7%94%A8Redis%E8%AE%BE%E8%AE%A1%E9%94%81/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2021 Bruce
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-137867677-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
