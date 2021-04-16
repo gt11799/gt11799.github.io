@@ -3,19 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>如何安装cx_Oracle库 | 亦步亦趋记</title>
+  <title>Tag: 随记 | 亦步亦趋记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Oracle的Python客户端确实有点烦人，直接pip install是搞不定的，需要安装SDK和client。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="如何安装cx_Oracle库">
-<meta property="og:url" content="http://blog.0x01.site/2017/03/29/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85cx-Oracle%E5%BA%93/index.html">
+  <meta name="description" content="写一些Python和无关Python的文章">
+<meta property="og:type" content="website">
+<meta property="og:title" content="亦步亦趋记">
+<meta property="og:url" content="http://blog.0x01.site/tags/%E9%9A%8F%E8%AE%B0/index.html">
 <meta property="og:site_name" content="亦步亦趋记">
-<meta property="og:description" content="Oracle的Python客户端确实有点烦人，直接pip install是搞不定的，需要安装SDK和client。">
+<meta property="og:description" content="写一些Python和无关Python的文章">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-03-29T11:17:30.000Z">
-<meta property="article:modified_time" content="2021-04-16T14:48:39.046Z">
 <meta property="article:author" content="Bruce">
-<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="亦步亦趋记" type="application/atom+xml">
@@ -176,127 +173,53 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-如何安装cx-Oracle库" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
   
-    <div class="article-meta">
-      <a href="/2017/03/29/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85cx-Oracle%E5%BA%93/" class="article-date">
-  	<time datetime="2017-03-29T11:17:30.000Z" itemprop="datePublished">2017-03-29</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2021" class="archive-year">2021</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2021/04/16/%E5%85%B3%E4%BA%8E%E5%8D%81%E4%B8%89%E9%82%80%E7%9A%84%E9%9A%8F%E8%AE%B0/" class="archive-article-date">
+  	<time datetime="2021-04-16T15:44:37.000Z" itemprop="datePublished">4月 16</time>
 </a>
-    </div>
+        </div>
+    	 
   
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      如何安装cx_Oracle库
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2021/04/16/%E5%85%B3%E4%BA%8E%E5%8D%81%E4%B8%89%E9%82%80%E7%9A%84%E9%9A%8F%E8%AE%B0/">关于十三邀的随记</a>
     </h1>
   
 
-      </header>
-      
-      <div class="article-info article-info-post">
-        
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E8%AE%B0/" rel="tag">随记</a></li></ul>
 	</div>
 
-        
+          
 
+        </div>
         <div class="clearfix"></div>
-      </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Oracle的Python客户端确实有点烦人，直接<code>pip install</code>是搞不定的，需要安装SDK和client。<span id="more"></span></p>
-<p>首先去<a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html">这里</a>下载<code>instantclient-sdk-linux-x86-64</code> 和 <code>instantclient-basic-linux-x86-64</code></p>
-<p>然后要选择Oracle的目录，我一般都放在<code>/var/www/oracle</code>，在这个目录解压这两个压缩包</p>
-<pre><code>unzip instantclient-sdk-linux-x86-64-11.2.0.2.0.zip
-unzip instantclient-basic-linux-x86-64-11.2.0.2.0.zip
-</code></pre><p>解压后的文件都会存放在<code>instantclient_11_2</code>，进入这个目录</p>
-<pre><code>ln -s libclntsh.so.11.1 libclntsh.so
-ln -s libocci.so.11.1 libocci.so
-</code></pre><p>以上都是不同的版本的名字也不一样。Oracle不默认指定一个，也是醉了</p>
-<p>然后需要指定Oracle的Home, <code>vim ~/.bashrc</code>，在末尾加上</p>
-<pre><code># oracle
-export ORACLE_HOME=/var/www/oracle/instantclient_11_2
-export LD_LIBRARY_PATH=$ORACLE_HOME
-export PATH=$ORACLE_HOME:$PATH
-</code></pre><p>如果要立刻装，则需要<code>source ~/.bashrc</code>，然后就可以安装<code>cx_Oracle</code>了</p>
-<pre><code>pip install cx_Oracle
-</code></pre>
-      
-    </div>
-    
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/04/13/shell%E6%98%BE%E7%A4%BA%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          shell显示乱码问题的解决
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/03/29/%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AEMySQL%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">如何配置MySQL主从数据库</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
 
-
-<div class="share">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到：</span>
-		<a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-<div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="如何安装cx-Oracle库" data-title="如何安装cx_Oracle库" data-url="http://blog.0x01.site/2017/03/29/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85cx-Oracle%E5%BA%93/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
-
-
+    
 
 </div>
       <footer id="footer">
@@ -324,9 +247,9 @@ export PATH=$ORACLE_HOME:$PATH
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false
 	}
