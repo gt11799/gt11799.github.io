@@ -1,6 +1,6 @@
 title: Python环境安装合集
 date: 2019-07-21 23:09:58
-tags: python
+tags: Python
 ---
 
 ## 无法安装mysql-python的解决办法

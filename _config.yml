@@ -31,7 +31,6 @@ skip_render:
 new_post_name: :title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
 post_asset_folder: false
@@ -64,9 +63,9 @@ pagination_dir: page
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
 
-# plugins:
-# - hexo-generator-feed
-# - hexo-generator-sitemap
+plugins:
+- hexo-generator-feed
+- hexo-generator-sitemap
 
 theme: yilia
 
@@ -76,4 +75,24 @@ deploy:
   type: git
   repo: git@github.com:gt11799/gt11799.github.io.git
   branch: master
-  message: "auto deploy"
+  message: "hexo auto deploy"
+
+
+# yilia
+meta: false
+pages: false
+posts:
+  title: true
+  date: true
+  path: true
+  text: false
+  raw: false
+  content: false
+  slug: false
+  updated: false
+  comments: false
+  link: false
+  permalink: false
+  excerpt: false
+  categories: false
+  tags: true

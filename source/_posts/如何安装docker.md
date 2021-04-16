@@ -1,6 +1,6 @@
 title: 如何安装docker
 date: 2017-08-31 20:42:15
-tags: docker
+tags: Docker
 ---
 
 在我国的网络环境下，如何安装docker呢<!--more-->
