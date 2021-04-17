@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.0x01.site">
-  <title>如何拥有一台远程服务器 | 亦步亦趋记</title>
+  <title>爸妈来我家 | 亦步亦趋记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这是给我的小白朋友们的教程  我在香港买了一台服务器，需要把他们的ssh key加入我的服务器里来，然后才能继续翻墙的教程。通常他们都没有生成过，因此就从头开始。">
+  <meta name="description" content="我回家的次数越来越少，每年例行都会让爸妈来一次。去年疫情没来，今年年初给补上。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何拥有一台远程服务器">
-<meta property="og:url" content="http://blog.0x01.site/2015/09/29/%E5%A6%82%E4%BD%95%E6%8B%A5%E6%9C%89%E4%B8%80%E5%8F%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:title" content="爸妈来我家">
+<meta property="og:url" content="http://blog.0x01.site/2021/04/17/%E7%88%B8%E5%A6%88%E6%9D%A5%E6%88%91%E5%AE%B6/index.html">
 <meta property="og:site_name" content="亦步亦趋记">
-<meta property="og:description" content="这是给我的小白朋友们的教程  我在香港买了一台服务器，需要把他们的ssh key加入我的服务器里来，然后才能继续翻墙的教程。通常他们都没有生成过，因此就从头开始。">
+<meta property="og:description" content="我回家的次数越来越少，每年例行都会让爸妈来一次。去年疫情没来，今年年初给补上。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2015-09-29T08:28:53.000Z">
-<meta property="article:modified_time" content="2021-04-16T14:48:39.046Z">
+<meta property="article:published_time" content="2021-04-17T13:43:19.000Z">
+<meta property="article:modified_time" content="2021-04-17T16:36:37.748Z">
 <meta property="article:author" content="Bruce">
-<meta property="article:tag" content="运维">
+<meta property="article:tag" content="随笔">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="亦步亦趋记" type="application/atom+xml">
@@ -164,53 +164,39 @@ ga('send', 'pageview');
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-如何拥有一台远程服务器" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-爸妈来我家" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      如何拥有一台远程服务器
+      爸妈来我家
     </h1>
   
 
         
-        <a href="/2015/09/29/%E5%A6%82%E4%BD%95%E6%8B%A5%E6%9C%89%E4%B8%80%E5%8F%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="archive-article-date">
-  	<time datetime="2015-09-29T08:28:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-09-29</time>
+        <a href="/2021/04/17/%E7%88%B8%E5%A6%88%E6%9D%A5%E6%88%91%E5%AE%B6/" class="archive-article-date">
+  	<time datetime="2021-04-17T13:43:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>这是给我的小白朋友们的教程</p>
-</blockquote>
-<p>我在香港买了一台服务器，需要把他们的ssh key加入我的服务器里来，然后才能继续翻墙的教程。通常他们都没有生成过，因此就从头开始。<br><span id="more"></span></p>
-<p>首先打开终端，或者在Spotlight里输入terminal, 打开终端<br>然后在终端中输入以下命令</p>
-<pre><code>cd ~/.ssh
-ls
-</code></pre><p>查看输出中是否有id_rsa之类的文件，如果有，则跳过。（当然最好是截图给你那亲爱的程序员同学啦）<br>如果没有，则需要生成，继续下面的命令</p>
-<pre><code>ssh-keygen
-</code></pre><p>有任何提示，一路回车即可，注意看，如果要填写邮箱，可以填上自己的邮箱。不出意外，ssh key已经生成<br>然后继续输入下面的命令</p>
-<pre><code>cat ~/.ssh/id_rsa.pub
-</code></pre><p>复制出现的信息（你的公钥），打开微信，粘贴发给程序员同学。</p>
-<p>程序员同学加好公钥之后，会发过来一个config文件，(此时确保你没有关闭过终端，否则需要执行一开始的那个命令<code>cd ~/.ssh</code>)</p>
-<pre><code>ls
-</code></pre><p>看看有没有config文件，没有的话就新建</p>
-<pre><code>touch config
-</code></pre><p>输入命令</p>
-<pre><code>pwd
-</code></pre><p>然后会显示当前的路径，复制，打开finder，点击<code>前往-前往文件夹</code>，粘帖刚才复制的路径，回车<br>看到config文件，右击，使用文本文档打开，把程序员同学发过来的config信息粘帖进去。<br>如果不出意外，就已经完成了。仔细看程序员同学发过来的信息，大概类似于</p>
-<pre><code>Host hk
-User root
-Port 22
-Hostname 102.102.102.102
-IdentityFile ~/.ssh/id_rsa
-</code></pre><p>Host后面的就是主机名称，比如这个信息里就是hk，为了测试一下是否成功，输入以下命令</p>
-<pre><code>ssh hk
-</code></pre><p>有提示，输入yes，回车。如果没有报错的信息，而且得到一个不同的终端，就可以继续下一篇教程（如何利用一台远程服务器快速的科学上网）了。</p>
+        <p>我回家的次数越来越少，每年例行都会让爸妈来一次。去年疫情没来，今年年初给补上。<span id="more"></span></p>
+<p>他俩每次出行都会带个苹果，象征个平平安安。他们这次有备而来，带了米，带了片汤(像刀削面的东西)，带了花生，带了鹅蛋！让我不用管他们，他们自己可以做饭吃。</p>
+<p>就记一些片段吧，想起什么就写什么。</p>
+<p>登机了，我爸拍了一张我妈的照片，脸上的斑更严重了，感觉妈妈老了。不过我爸妈相对于同龄人还好，白头发不多，看起来也没有那么老。我很欣慰他们不愁。</p>
+<p>我妈有一天煮了个鹅蛋和片汤给我，我吃了两口就吃不下了。我不喜欢妈妈做的饭了。</p>
+<p>我爸喜欢出去玩，喜欢拍照，喜欢花花草草，喜欢新的事物。他来了深圳很开心，到处出去转。我妈不能走，于是他俩经常会产生分歧。要么就是我妈找个地方坐下来等我爸，我爸就转一圈回来接她。今天下午我带我妈去医院，我爸总算找到机会，一个人直接走到了荔香公园，还在里面迷了路。凭借自己熟练的导航技巧，还是轻松的回家了。</p>
+<p>我妈有罗圈腿，这么多年我完全不知道。罗圈腿会导致膝盖内侧挤压，导致了腿疼的毛病。检查了之后医生说，做个微创手术矫正下腿就好了。这两天跟我妈吵的厉害，基本上都是我单方面的输出。我妈说xxx的腿也这样，老了没办法。</p>
+<p>男人的视野是集中的，女人的视野是发散的。我去机场接爸妈，去的晚了，一个劲的往里冲，我妈在洗手间门口等我爸，我妈比我先发现对方。我们去医院，我爸说在医院门口等我们，但是外面没地方坐，后来又到了门诊大厅里坐着。我们路过他面前，我压根没注意，我妈就能及时发现，哎，你爸怎么在这</p>
+<p>我爸去买卤鹅，去点单，我猜是服务员让他自己扫码点单，我爸说话她没懂，我爸气的扭头就走。深圳和互联网对我爸都不是很友好呢。</p>
+<p>我妈还是想让我丢掉猫。我爸倒是还挺喜欢。</p>
+<p>我妈回家做了米饭，可是我又买了包子。我妈的米饭没人吃了。</p>
+<p>给爸爸买了一瓶酒，名叫开山。这次爸妈来，没有提前准备。给老爸留了一瓶五粮液，没想到两天喝完了。出去买酒，普通的牛栏山感觉不太行，于是去买点好的，没想到只有这一款。酒的度数不高，很容易入口。感觉我爸喝的不过瘾。</p>
+<p>明天带他们去欢乐海湾去玩玩吧，远远看看湾区之光。</p>
 
       
 
@@ -250,7 +236,7 @@ IdentityFile ~/.ssh/id_rsa
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
         		</li>
       		
 		</ul>
@@ -269,18 +255,9 @@ IdentityFile ~/.ssh/id_rsa
   
 <nav id="article-nav">
   
-    <a href="/2015/12/03/%E8%BF%99%E4%B8%80%E5%B9%B4%E5%8D%B3%E5%B0%86%E8%BF%87%E5%8E%BB/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          这一年即将过去
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/09/09/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E4%B8%80%E5%8F%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BF%AB%E9%80%9F%E7%9A%84%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">如何利用一台远程服务器快速的科学上网</div>
+    <a href="/2021/04/16/%E5%85%B3%E4%BA%8E%E5%8D%81%E4%B8%89%E9%82%80%E7%9A%84%E9%9A%8F%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于十三邀的随记</div>
       <i class="icon-circle-right"></i>
     </a>
   
