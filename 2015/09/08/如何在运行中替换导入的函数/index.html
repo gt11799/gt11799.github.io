@@ -16,7 +16,7 @@
 <meta property="og:description" content="在公司的一个内部分享会上，同事分享了一个很好的可以在函数执行时，替换导入的函数的方法，让我这等土八路实在是羞愧。废话不多说，待我娓娓道来。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2015-09-08T11:39:50.000Z">
-<meta property="article:modified_time" content="2021-04-16T14:48:39.046Z">
+<meta property="article:modified_time" content="2022-05-04T13:10:55.198Z">
 <meta property="article:author" content="Bruce">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -185,20 +185,16 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>在公司的一个内部分享会上，同事分享了一个很好的可以在函数执行时，替换导入的函数的方法，让我这等土八路实在是羞愧。<br>废话不多说，待我娓娓道来。<span id="more"></span></p>
-<h4 id="事件起因"><a href="#事件起因" class="headerlink" title="事件起因"></a>事件起因</h4><h6 id="我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如："><a href="#我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如：" class="headerlink" title="我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如："></a>我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如：</h6><pre><code>if config[&apos;DEBUG&apos;] = True:
-    dummy_sender(msg)
-</code></pre><p>但是这样很不优雅，而且为了测试脚本，这段代码也要带到生产环境里去，也会影响效率。</p>
-<h3 id="Python的特性"><a href="#Python的特性" class="headerlink" title="Python的特性"></a>Python的特性</h3><h6 id="Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时："><a href="#Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时：" class="headerlink" title="Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时："></a>Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时：</h6><pre><code>from a import sender
+<h4 id="事件起因"><a href="#事件起因" class="headerlink" title="事件起因"></a>事件起因</h4><p>我们写了一个短信通道，为了测试该通道的并发能力，需要进行压力测试，但是压力测试的时候肯定不能真的发短信。之前的办法是在代码里进行一些判断，比如：<br>        if config[‘DEBUG’] = True:<br>            dummy_sender(msg)</p>
+<p>但是这样很不优雅，而且为了测试脚本，这段代码也要带到生产环境里去，也会影响效率。</p>
+<h3 id="Python的特性"><a href="#Python的特性" class="headerlink" title="Python的特性"></a>Python的特性</h3><p>Python中一切皆对象，函数也不例外。当我们遇到的是下面的这个脚本时：</p>
+<pre><code>from a import sender
 
 def send_sms(msg):
     sender(msg)
-</code></pre><h5 id="Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为："><a href="#Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为：" class="headerlink" title="Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为："></a>Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为：</h5><pre><code>&apos;send_sms&apos;: &lt;function send_sms at 0x10a1e7050&gt;,
-&apos;__builtins__&apos;: &lt;module &apos;__builtin__&apos; (built-in)&gt;,
-&apos;__file__&apos;: &apos;practise.py&apos;,
-&apos;sender&apos;: &lt;function sender at 0x10a1e7050&gt;,
-</code></pre><h5 id="那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send-sms的globals会带有该脚本的所有globals的属性，我们可以从这里下手"><a href="#那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send-sms的globals会带有该脚本的所有globals的属性，我们可以从这里下手" class="headerlink" title="那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send_sms的globals会带有该脚本的所有globals的属性，我们可以从这里下手"></a>那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send_sms的<strong>globals</strong>会带有该脚本的所有globals的属性，我们可以从这里下手</h5><pre><code>send_sms.__globals__[&apos;sender&apos;] = dummy_sender
-</code></pre><h5 id="如果打印一下sys-modules-我们发现，我们函数名称也在里面。于是也可以替换"><a href="#如果打印一下sys-modules-我们发现，我们函数名称也在里面。于是也可以替换" class="headerlink" title="如果打印一下sys.modules, 我们发现，我们函数名称也在里面。于是也可以替换"></a>如果打印一下sys.modules, 我们发现，我们函数名称也在里面。于是也可以替换</h5><pre><code>sys.modules[&apos;sender&apos;] = dummy_sender
-</code></pre><p>注意，从a脚本导入后，a脚本导入的函数也会在sys.modules里。<br>我对于其中的原理虽然了解一些，但还是难以说清楚，按照土八路的思想，能用就万岁。原理以后再补。</p>
+</code></pre><p>Python解释器在调用sender时，会按照sender这个字符串去该脚本中的globals中寻找函数，并且调用。这个脚本中的globals为：<br>        ‘send_sms’: <function send_sms at 0x10a1e7050>,<br>        ‘<strong>builtins</strong>‘: <module '__builtin__' (built-in)>,<br>        ‘<strong>file</strong>‘: ‘practise.py’,<br>        ‘sender’: <function sender at 0x10a1e7050>,</p>
+<p>那么我们能不能在执行当前脚本的时候，替换掉sender呢。当然可以。send_sms的<strong>globals</strong>会带有该脚本的所有globals的属性，我们可以从这里下手<br>        send_sms.<strong>globals</strong>[‘sender’] = dummy_sender</p>
+<p>如果打印一下sys.modules, 我们发现，我们函数名称也在里面。于是也可以替换<br>        sys.modules[‘sender’] = dummy_sender<br>注意，从a脚本导入后，a脚本导入的函数也会在sys.modules里。<br>我对于其中的原理虽然了解一些，但还是难以说清楚，按照土八路的思想，能用就万岁。原理以后再补。</p>
 
       
 
