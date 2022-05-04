@@ -7,6 +7,8 @@ tags: Python
 
 ## 完美做法之SETNX
 
+> 补充：setnx支持超时时间了
+
 `SETNX` 是`set if not exists`的缩写，会返回整数值
 
 - 1，当值未被设置

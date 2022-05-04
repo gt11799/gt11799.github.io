@@ -55,7 +55,7 @@ reward_type: 2
 # 打赏wording
 reward_wording: '请我喝杯咖啡吧'
 # 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg
-alipay: http://s.blog.0x01.site/alipay.png
+alipay: /image/alipay.png
 # 微信二维码图片地址
 # weixin: 
 
@@ -76,7 +76,7 @@ google_analytics: 'UA-137867677-1'
 favicon: /favicon.ico
 
 #你的头像url
-avatar: http://s.blog.0x01.site/avatar.jpg
+avatar: /image/avatar.jpg
 
 #是否开启分享
 share_jia: false
@@ -129,7 +129,6 @@ smart_menu:
 
 friends:
   瓦斯阅读: https://qnmlgb.tech/
-  多摸鱼: https://bang.duomoyu.com/
   Whistle: https://www.bitbo-liuyang.com/
   # 友情链接4: http://localhost:4000/
   # 友情链接5: http://localhost:4000/

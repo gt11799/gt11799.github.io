@@ -1,4 +1,4 @@
-title: 如果修改MySQL的密码
+title: 如何修改MySQL的密码
 date: 2019-03-30 23:56:12
 tags: 运维
 ---
